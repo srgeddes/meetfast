@@ -1,19 +1,18 @@
 import { cookies } from "next/headers";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = resolveEnv("NEXT_PUBLIC_SUPABASE_URL", process.env.NEXT_PUBLIC_SUPABASE_URL);
+const supabaseAnonKey = resolveEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
-if (!supabaseUrl) {
-  throw new Error("NEXT_PUBLIC_SUPABASE_URL is not set");
+function resolveEnv(name: string, value: string | undefined): string {
+  if (!value) {
+    throw new Error(`${name} is not set`);
+  }
+  return value;
 }
 
-if (!supabaseAnonKey) {
-  throw new Error("NEXT_PUBLIC_SUPABASE_ANON_KEY is not set");
-}
-
-export const createSupabaseServerClient = () => {
-  const cookieStore = cookies();
+export async function createSupabaseServerClient() {
+  const cookieStore = await cookies();
 
   return createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
@@ -28,10 +27,10 @@ export const createSupabaseServerClient = () => {
       },
     },
   });
-};
+}
 
-export const createSupabaseRouteHandlerClient = () => {
-  const cookieStore = cookies();
+export async function createSupabaseRouteHandlerClient() {
+  const cookieStore = await cookies();
 
   return createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
@@ -46,4 +45,4 @@ export const createSupabaseRouteHandlerClient = () => {
       },
     },
   });
-};
+}

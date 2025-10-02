@@ -22,7 +22,7 @@ export async function GET(request: Request) {
 	}
 
 	if (code) {
-		const supabase = createSupabaseRouteHandlerClient();
+		const supabase = await createSupabaseRouteHandlerClient();
 		const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
 		if (exchangeError) {
 			console.error("Failed to exchange auth code", exchangeError.message);

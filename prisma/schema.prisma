@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
@@ -12,4 +7,131 @@ datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+}
+        
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum LinkOverrideType {
+  BLOCK
+  ADDITIONAL
+}
+
+enum MeetingStatus {
+  BOOKED
+  CANCELLED
+  RESCHEDULED
+}
+
+enum MeetingAttendeeRole {
+  HOST
+  GUEST
+}
+
+enum AttendeeResponseStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model SchedulingLink {
+  id                    String                        @id @default(uuid())
+  userId                String                        @db.Uuid
+  slug                  String                        @unique
+  title                 String
+  description           String?
+  durationMinutes       Int                           @default(30)
+  bufferBeforeMinutes   Int                           @default(0)
+  bufferAfterMinutes    Int                           @default(0)
+  minNoticeMinutes      Int                           @default(60)
+  maxAdvanceDays        Int?                          @default(60)
+  timeZone              String
+  isActive              Boolean                       @default(true)
+  requireConfirmation   Boolean                       @default(false)
+  allowReschedule       Boolean                       @default(true)
+  metadata              Json?
+  createdAt             DateTime                      @default(now())
+  updatedAt             DateTime                      @updatedAt
+  availabilityWindows   SchedulingLinkAvailability[]
+  overrides             SchedulingLinkOverride[]
+  meetings              Meeting[]
+
+  @@index([userId])
+}
+
+model SchedulingLinkAvailability {
+  id                    String          @id @default(uuid())
+  schedulingLinkId      String
+  dayOfWeek             DayOfWeek
+  startTime             DateTime        @db.Time
+  endTime               DateTime        @db.Time
+  customDurationMinutes Int?
+  customBufferBefore    Int?
+  customBufferAfter     Int?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  schedulingLink        SchedulingLink  @relation(fields: [schedulingLinkId], references: [id], onDelete: Cascade)
+
+  @@index([schedulingLinkId, dayOfWeek])
+}
+
+model SchedulingLinkOverride {
+  id               String         @id @default(uuid())
+  schedulingLinkId String
+  overrideDate     DateTime       @db.Date
+  startTime        DateTime?      @db.Time
+  endTime          DateTime?      @db.Time
+  type             LinkOverrideType @default(BLOCK)
+  note             String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  schedulingLink   SchedulingLink @relation(fields: [schedulingLinkId], references: [id], onDelete: Cascade)
+
+  @@index([schedulingLinkId, overrideDate])
+}
+
+model Meeting {
+  id                 String                  @id @default(uuid())
+  schedulingLinkId   String
+  hostUserId         String                  @db.Uuid
+  status             MeetingStatus           @default(BOOKED)
+  startTime          DateTime
+  endTime            DateTime
+  guestName          String?
+  guestEmail         String
+  company            String?
+  notes              String?
+  location           String?
+  meetingUrl         String?
+  videoConferenceId  String?
+  calendarEventId    String?
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+  schedulingLink     SchedulingLink          @relation(fields: [schedulingLinkId], references: [id], onDelete: Cascade)
+  attendees          MeetingAttendee[]
+
+  @@index([schedulingLinkId])
+  @@index([hostUserId])
+  @@index([startTime])
+}
+
+model MeetingAttendee {
+  id             String                  @id @default(uuid())
+  meetingId      String
+  email          String
+  name           String?
+  role           MeetingAttendeeRole     @default(GUEST)
+  responseStatus AttendeeResponseStatus  @default(PENDING)
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  meeting        Meeting                 @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@index([meetingId, email])
 }

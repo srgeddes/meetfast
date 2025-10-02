@@ -14,7 +14,7 @@ const GOOGLE_SCOPES = [
 	"https://www.googleapis.com/auth/calendar.events",
 ].join(" ");
 
-export function LoginButton() {
+export function GoogleLoginButton() {
 	const [loading, setLoading] = useState(false);
 	const handleLogin = useCallback(async () => {
 		if (loading) return;
@@ -31,13 +31,12 @@ export function LoginButton() {
 			return;
 		}
 
-		const redirectTo = new URL("/auth/callback", origin).toString();
+		const redirectTo = new URL("/api/auth/callback", origin).toString();
 
 		const { error } = await supabase.auth.signInWithOAuth({
 			provider: "google",
 			options: {
 				redirectTo,
-				flowType: "pkce",
 				scopes: GOOGLE_SCOPES,
 				queryParams: {
 					access_type: "offline",
@@ -54,8 +53,8 @@ export function LoginButton() {
 
 	return (
 		<Button onClick={handleLogin} variant="outline" size="lg" className="gap-2" disabled={loading}>
-			<FcGoogle className="h-5 w-5" />
-			<span>{loading ? "Redirecting..." : "Continue with Google"}</span>
+			<FcGoogle className="h-7 w-7" />
+			<span>{loading ? "Redirecting..." : "Connect Google Calendar"}</span>
 		</Button>
 	);
 }

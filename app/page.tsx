@@ -1,21 +1,13 @@
 import { Dashboard } from "@/components/app/dashboard";
 import { Landing } from "@/components/landing";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getAuthenticatedUser } from "@/lib/helpers/auth/auth-helpers";
 
 export default async function HomePage() {
-  const supabase = createSupabaseServerClient();
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
+	const user = await getAuthenticatedUser();
 
-  if (error && error.message !== "Auth session missing!") {
-    console.error("Failed to load authenticated user", error.message);
-  }
+	if (!user) {
+		return <Landing />;
+	}
 
-  if (!user) {
-    return <Landing />;
-  }
-
-  return <Dashboard user={user} />;
+	return <Dashboard user={user} />;
 }
