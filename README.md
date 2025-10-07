@@ -23,7 +23,7 @@ MeetFast is a Chrome extension that will accelerate meeting prep by connecting d
 2. Create a `.env` file based on `.env.example` and update the values:
    ```bash
    cp .env.example .env
-   # Edit .env and set GOOGLE_OAUTH_CLIENT_ID and GOOGLE_API_KEY
+   # Edit .env and set GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET, GOOGLE_OAUTH_CALLBACK_URL
    ```
 3. Build the extension bundle:
    ```bash
@@ -39,13 +39,6 @@ MeetFast is a Chrome extension that will accelerate meeting prep by connecting d
 
 ## Current capabilities
 
-- Prompts the user to grant Google Calendar access via `chrome.identity`.
-- After authentication, fetches the user's calendars and a sample of upcoming events (primary calendar) via background service worker calls.
-- Bootstrap-powered popup UI with clear status messaging and quick actions for data retrieval.
-
-## Next steps
-
-- Persist auth state and reflect it in the popup automatically.
-- Surface calendar and event data with richer formatting within the popup.
-- Handle token refresh/expiration and sign-out flows.
-- Expand scopes or additional APIs as core MeetFast features evolve.
+- Guides the user through Google OAuth (Authorization Code flow) without external services.
+- Fetches calendars and events for the signed-in account to generate availability suggestions.
+- Modern popup experience built with React, Tailwind CSS, and shadcn-inspired components for selecting calendars, configuring meeting preferences (including weekend filtering), and copying shareable availability.

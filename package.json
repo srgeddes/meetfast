@@ -13,8 +13,27 @@
     "google-calendar",
     "meetfast"
   ],
+  "dependencies": {
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-popover": "^1.0.7",
+    "@radix-ui/react-slot": "^1.0.3",
+    "@radix-ui/react-switch": "^1.0.3",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.421.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-day-picker": "^8.10.1",
+    "tailwind-merge": "^2.2.1"
+  },
   "devDependencies": {
-    "dotenv": "^17.2.3"
+    "autoprefixer": "^10.4.19",
+    "dotenv": "^17.2.3",
+    "esbuild": "^0.21.5",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.4",
+    "tailwindcss-animate": "^1.0.7"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

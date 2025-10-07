@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--background: 0 0% 100%;
+		--foreground: 240 10% 3.9%;
+
+		--card: 0 0% 100%;
+		--card-foreground: 240 10% 3.9%;
+
+		--popover: 0 0% 100%;
+		--popover-foreground: 240 10% 3.9%;
+
+		--primary: 222.2 47.4% 11.2%;
+		--primary-foreground: 210 40% 98%;
+
+		--secondary: 210 40% 96.1%;
+		--secondary-foreground: 222.2 47.4% 11.2%;
+
+		--muted: 210 40% 96.1%;
+		--muted-foreground: 215.4 16.3% 46.9%;
+
+		--accent: 210 40% 96.1%;
+		--accent-foreground: 222.2 47.4% 11.2%;
+
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 210 40% 98%;
+
+		--border: 214.3 31.8% 91.4%;
+		--input: 214.3 31.8% 91.4%;
+		--ring: 222.2 84% 4.9%;
+
+		--radius: 1rem;
+	}
+
+	* {
+		@apply border-border;
+	}
+
+	body {
+		@apply bg-background font-sans text-foreground antialiased;
+		font-feature-settings: "liga" 1, "kern" 1;
+	}
+}
+
+@layer components {
+	.rdp {
+		@apply rounded-xl bg-white p-3 shadow-sm ring-1 ring-slate-200;
+	}
+	.rdp-months {
+		@apply flex flex-col sm:flex-row sm:space-x-4 sm:space-y-0;
+	}
+	.rdp-month {
+		@apply space-y-4;
+	}
+	.rdp-nav {
+		@apply flex items-center justify-between space-x-1;
+	}
+	.rdp-nav_button {
+		@apply inline-flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition hover:bg-muted;
+	}
+	.rdp-caption {
+		@apply flex justify-center pt-1;
+	}
+	.rdp-caption_label {
+		@apply text-sm font-medium;
+	}
+	.rdp-table {
+		@apply w-full border-collapse space-y-1;
+	}
+	.rdp-head_row {
+		@apply flex;
+	}
+	.rdp-head_cell {
+		@apply w-9 rounded-md text-xs font-medium text-muted-foreground;
+	}
+	.rdp-row {
+		@apply mt-2 flex w-full;
+	}
+	.rdp-cell {
+		@apply text-center;
+	}
+	.rdp-day {
+		@apply inline-flex h-9 w-9 items-center justify-center rounded-md text-sm font-normal transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+	}
+	.rdp-day_button {
+		@apply h-full w-full rounded-md p-0;
+	}
+	.rdp-day_range_start .rdp-day_button,
+	.rdp-day_range_end .rdp-day_button,
+	.rdp-day_selected {
+		@apply bg-primary text-primary-foreground hover:bg-primary/90;
+	}
+	.rdp-day_today:not(.rdp-day_selected) {
+		@apply border border-primary text-primary;
+	}
+	.rdp-day_disabled {
+		@apply pointer-events-none opacity-30;
+	}
+	.rdp-day_outside {
+		@apply opacity-50;
+	}
+}
+
+@layer utilities {
+	.text-balance {
+		text-wrap: balance;
+	}
+}
